@@ -94,7 +94,7 @@
 }
 
 	L.geoJSON(LoveLibrary,{}).addTo(mymap);
-	L.geoJSON(LoveLibrary,{}).addTo(mymap).bindPopup(LoveLibrary.properties.popupContent);
+	bindPopup(LoveLibrary.properties.popupContent);
 //(17)note there at the bottom that you "addTo(mymap)" - addTo is a Leaflet function that adds a layer, and in parenthesis you tell it to add it to the variable "mymap," which is where all of your code is written.
 
 </script>
