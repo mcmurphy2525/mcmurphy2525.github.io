@@ -43,7 +43,7 @@
 	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 	subdomains: 'abcd',
 	minZoom: 0,
-	maxZoom: 16,
+	maxZoom: 12,
 	ext: 'png'
 }).addTo(mymap);
 //(10) right above here, you see you're adding this tileset and setting the max zoom level of "mymap" 
@@ -51,7 +51,7 @@
 //(11) this is how you define individual features on the map - a marker, a cirlce, a polygon. You could also call up a variable and point it to a hosted GIS file to load it in.
 //(12) note that each popup has preloaded text here. You could also have a variable that points attributes in a dataset to populate a popup; we will do this in the future
 	L.marker([40.819273, -96.702968]).addTo(mymap)
-		.bindPopup("<b>Hello Universe!</b><br />I open automatically & I am really annoying.").openPopup();
+		.bindPopup("<b>Hello Universe!</b><br />I open automatically, so I am really annoying.").openPopup();
 
 	L.circle([40.8207, -96.7056], 200, {
 		color: 'Black',
