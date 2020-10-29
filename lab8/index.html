@@ -77,7 +77,7 @@ function style(feature) {
 }
 //adds province and covid data to maps
 var provinces = new L.geoJson(provinces, {style:style}).addTo(map);
-//size of covid circles
+//size of covid circles may need to adjust these numbers
 var minValue= 100;
 var minRadius = 5;
 function calcRadius(val) {
