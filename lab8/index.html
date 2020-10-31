@@ -65,7 +65,7 @@ function getColor(value) {
     value > 1000000  ? '#86b1d6':
     '#c5e0f7';
 }
-//styles the provinces
+//applies the styles the provinces
 function style(feature) {
     return {
         fillColor: getColor(feature.properties.POP10),
@@ -75,25 +75,56 @@ function style(feature) {
         fillOpacity: 0.7 //opacity of filled color from getColor()
     };
 }
-//adds province and covid data to maps
+//adds province data to maps
 var provinces = new L.geoJson(provinces, {style:style}).addTo(map);
-//size of covid circles may need to adjust these numbers
-var minValue= 100;
-var minRadius = 5;
+
+// make an html popup with properties
+//adds covid popup when a circle is clicked
+var onEachFeature = function(feature, layer) {
+    if (feature.properties) {
+        var prop = feature.properties;
+        var popup = '<h3>' + prop.Location + '</h3>' + '<br>Cases Day 1: ' + prop['1'] + '<br>Cases Day 16: ' + prop.covid;
+        feature.layer = layer;
+        layer.bindPopup(popup, {maxWidth: "auto"});
+    }
+};
+//size of covid circles
+//var minValue= 100;
+//var minRadius = 5;
+//Hubei problem fixed!
+var minValue = 1000;
+var minRadius = 10;
 function calcRadius(val) {
     return 0.9 * Math.pow(val/minValue, 0.7) * minRadius;
 }
+//adds covid circles to map
+var covidData = new L.geoJson(covidData, {
+    onEachFeature : onEachFeature,
+    pointToLayer: function(feature, ll){
+        return L.circleMarker(ll, {
+            color: '#5b0000',
+            opacity: 1,
+            weight: 2,
+            fillColor: '#ff0000',
+            fillOpacity: 0.5,
+            //radius: 10
+            radius: calcRadius(feature.properties.covid)
+        });
+    }
+}).addTo(map);
+//add layers to control
 var basemaps = {
     "Light Canvas": canvas,
     "Satellite Imagery": imagery
 };
 var overlaymaps = {
-    "China Provinces": provinces
+    "China Provinces": provinces,
+    "COVID-19 Hotspots": covidData
 };
-//this line adds the base layers and province layer to a control so you can toggle them
+//and add control to map
 L.control.layers(basemaps, overlaymaps, {collapsed:false}).addTo(map);
 
-//LEGEND------------------------
+//MAKE THE LEGEND------------------------
 var legend = L.control({position: 'bottomleft'}); // Try the other lower corner if you prefer.
     legend.onAdd = function (map) {
         var div = L.DomUtil.create('div', 'legend'),
@@ -109,56 +140,30 @@ var legend = L.control({position: 'bottomleft'}); // Try the other lower corner 
 
 // Removing the legend when the layer is removed
 map.on('overlayremove', function(eventLayer){
-    if (eventLayer.name == 'provinces'){ // We use the key/display name to refer to the layer
+    if (eventLayer.name == 'China Provinces'){ // We use the key/display name to refer to the layer
         map.removeControl(legend); // legend is the variable name of the layer legend
     }
 });
 
 // Adding the legend when the layer is added
 map.on('overlayadd', function(eventLayer) {
-    if (eventLayer.name == 'provinces'){
+    if (eventLayer.name == 'China Provinces'){
         legend.addTo(map);
     }
 });
 
-var onEachFeature = function(feature, layer) {
-    if (feature.properties) {
-        var prop = feature.properties;
- 
-// make an html popup with properties
-//see how you can concatenate various attributes and text as needed, //including HTML markup, with single quotes. You pull out properties by
+
+
+//see how you can concatenate various attributes and text as needed, including HTML markup, with single quotes. You pull out properties by
 //typing in prop and then putting the field in brackets.
 //you can do this because prop = feature.properties._____
-
-//my wife said: "change bracketed properties to dot notation, which is allowed by es6, because this is more up to date."
-    var popup = '<h3>' + prop.Location + '</h3>' + '<br>Cases Day 1: ' + prop['1'] + '<br>Cases Day 16: ' + prop.covid;
+//my wife said: "change bracketed properties to dot notation when possible. This is allowed for variables in es6."  
 // add known info about event to the description
-          
- // you must create a layer property on each feature or else
- // the search results won't know where the item is on the map / layer
-        feature.layer = layer;
-        layer.bindPopup(popup, {maxWidth: "auto"});
-    }
-}; // end onEachFeature
-
-//adds popup giving covid data when circle is clicked
-var covidData = new L.geoJson(covidData, {
-    onEachFeature : onEachFeature,
-    pointToLayer: function(feature, ll){
-        return L.circleMarker(ll, {
-            color: '#5b0000',
-            opacity: 1,
-            weight: 2,
-            fillColor: '#ff0000',
-            fillOpacity: 0.5,
-            //radius: 10
-            radius: calcRadius(feature.properties.covid)   
-        });
-    } 
-}).addTo(map);
-
+// you must create a layer property on each feature or else
+// the search results won't know where the item is on the map / layer
 </script>
 
 
 </body>
 </html>
+
