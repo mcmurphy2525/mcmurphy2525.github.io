@@ -57,14 +57,15 @@ var canvas = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x
 	ext: 'png'
 }).addTo(map);
 
-//This is the function called to set the numbers and colors for the provinces. Need to remember to change numbers in legend stuff if changing these numbers. (line 100)
+//This is the function called to set the colors for the provinces by population numbers. Need to remember to change numbers in legend stuff if changing these numbers.
 function getColor(value) {
-    return value > 100000000 ? '#003b6f':
-    value > 25000000  ? '#226baa':
-    value > 5000000  ? '#548dbf':
-    value > 1000000  ? '#86b1d6':
-    '#c5e0f7';
+    return value > 50000000 ? '#2f69ef':
+    value > 25000000  ? '#4a86e9':
+    value > 10000000  ? '#548ddd':
+    value > 5000000  ? '#86b1ff':
+    '#c5e0ff';
 }
+
 //applies the styles the provinces
 function style(feature) {
     return {
@@ -128,7 +129,7 @@ L.control.layers(basemaps, overlaymaps, {collapsed:false}).addTo(map);
 var legend = L.control({position: 'bottomleft'}); // Try the other lower corner if you prefer.
     legend.onAdd = function (map) {
         var div = L.DomUtil.create('div', 'legend'),
-        grades = [0, 1000000, 5000000, 25000000, 100000000];
+        grades = [0, 5000000, 10000000, 25000000, 50000000];
         div.innerHTML = '<b>Population 2019 <br><br></b>';
 // Loop through the classes or “grades” and generate a label with a colored square for each interval.
         for (var i = 0; i < grades.length; i++) {
@@ -166,4 +167,3 @@ map.on('overlayadd', function(eventLayer) {
 
 </body>
 </html>
-
