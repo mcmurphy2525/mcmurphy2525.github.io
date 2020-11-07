@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8' />
+<title>Lab 10</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.css' rel='stylesheet' />
+<style>
+body { margin:0; padding:0; }
+#map { position:absolute; top:0; bottom:0; height:400px; width:800px; }
+</style>
+</head>
+<body>
+ 
+<div id='map'></div>
+<script>
+
+//here you add the map variable, much like leaflet,
+//and you set the starting pitch and bearing of the "camera"
+mapboxgl.accessToken = 'pk.eyJ1IjoiZ2VvZ3JhcGh5cHJvZiIsImEiOiJjanYxb2t1ZG8wNGU1NGFsNXVkcnhzNmFpIn0.M3qCJK8FYa06B-Irc6FD-g';
+var map = new mapboxgl.Map({
+style: 'mapbox://styles/mapbox/light-v10',
+center: [-96.701247, 40.814554],
+zoom: 16,
+pitch: 60,
+bearing: -17.6,
+container: 'map'
+});
+ 
+// The 'building' layer in the mapbox-streets vector source contains building-height
+// data from OpenStreetMap.
+map.on('load', function() {
+// Insert the layer beneath any symbol layer.
+var layers = map.getStyle().layers;
+ 
+var labelLayerId;
+for (var i = 0; i < layers.length; i++) {
+if (layers[i].type === 'symbol' && layers[i].layout['text-field']) {labelLayerId = layers[i].id; break;}}
+ 
+map.addSource('single-point', {
+  type: 'geojson', // specify the kind of data being added
+  data: {
+    type: 'FeatureCollection',
+    features: [
+	    {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -96.701300740242,
+          40.815839196008596
+        ]
+      }
+    }
+	]
+  }
+});
+
+map.addLayer({
+  id: 'point', // the layer's ID
+  source: 'single-point',
+  type: 'circle', // the layer type
+  paint: {
+    'circle-radius': 10,
+    'circle-color': '#007cbf'
+  }
+});
+ 
+map.addLayer({
+'id': '3d-buildings',
+'source': 'composite',
+'source-layer': 'building',
+'filter': ['==', 'extrude', 'true'],
+'type': 'fill-extrusion',
+'minzoom': 15,
+'paint': {
+'fill-extrusion-color': '#aaa',
+ 
+// you use an 'interpolate' expression to smooth transition effect to the
+// buildings as the user zooms in
+'fill-extrusion-height': ["interpolate", ["linear"], ["zoom"], 15, 0, 15.05, ["get", "height"] ], 'fill-extrusion-base': ["interpolate", ["linear"], ["zoom"], 15, 0, 15.05, ["get", "min_height"]],'fill-extrusion-opacity': .6}}, labelLayerId);});
+</script>
+ 
+</body>
+</html>
