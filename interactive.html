@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Lab 8</title>
+        <link rel="stylesheet" type="text/css" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" type="text/javascript"></script>
+        <script src="rt2010.js" type="text/javascript"></script>
+
+        <style type="text/css">
+            html, body { margin: 0; padding: 0; height: 100%; }
+            #mapid { height: 100%;}
+        </style>
+    </head>
+
+    <body>
+        <div id="mapid"></div>
+        
+
+<!--map-->
+<script>
+var mymap = L.map('mapid').setView([37, -95], 6);
+//37.0902° N, 95.7129° W
+L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    maxZoom: 18,
+    id: 'mapbox/streets-v11',
+    tileSize: 512,
+    zoomOffset: -1,
+    accessToken: 'pk.eyJ1IjoiZG9sZnluIiwiYSI6ImNraG1raDl5OTA3dW4ycXJkeXBtY3k2bnoifQ.1qfQUIqOtCraUUHfvtBcRQ'
+}).addTo(mymap);
+
+var marker1 = new L.marker([40.8136, -96.7026]).addTo(mymap);
+var circle1 = L.circle([40.8136, -96.7026], {
+    color: 'red',
+    fillColor: '#ff0000',
+    fillOpacity: 0.5,
+    radius: 1000
+}).addTo(mymap);
+marker1.bindPopup('Umm... Go Huskers?');
+function onMapClick(e) {
+    alert("You clicked the map at " + e.latlng);
+}
+
+mymap.on('click', onMapClick);
+
+</script>
+
+
+</body>
+</html>
+
+
