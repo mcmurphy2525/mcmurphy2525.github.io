@@ -19,7 +19,7 @@
 <!--map-->
 <script>
 var mymap = L.map('mapid').setView([37, -95], 5);
-//37.0902° N, 95.7129° W
+//base map tile layer
 L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
     maxZoom: 18,
@@ -29,22 +29,26 @@ L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
     accessToken: 'pk.eyJ1IjoiZG9sZnluIiwiYSI6ImNraG1raDl5OTA3dW4ycXJkeXBtY3k2bnoifQ.1qfQUIqOtCraUUHfvtBcRQ'
 }).addTo(mymap);
 
+//add marker
 var marker1 = new L.marker([40.8136, -96.7026]).addTo(mymap);
+
+//add circle over Lincoln
 var circle1 = L.circle([40.8136, -96.7026], {
     color: 'red',
     fillColor: '#ff0000',
     fillOpacity: 0.5,
     radius: 1000
 }).addTo(mymap);
+
+//bind popup to marker
 marker1.bindPopup('Umm... Go Huskers?<br>Nah. Go Tusken Raiders!<br><img style="width:200px;" src="https://mcmurphy2525.github.io/tr.jpg">');
+
+//tell lat-long when map is clicked anywhere
 function onMapClick(e) {
     alert("You clicked the map at " + e.latlng);
 }
-
 mymap.on('click', onMapClick);
-
 </script>
-
 
 </body>
 </html>
