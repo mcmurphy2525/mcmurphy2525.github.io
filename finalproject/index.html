@@ -107,8 +107,8 @@ legend.onAdd = function (map) {
 	var div = L.DomUtil.create('div', 'legend');
         div.innerHTML = '<b>Sex Ratio<br><br></b>';
 	// Loop to generate the color for the legend matching the map
-        for (var i = 0; i < 5; i++) {
-		div.innerHTML += '<i style="background:' + getColor(grades[i]) + '"></i>' + grades[i] + '<br><br>';
+        div.innerHTML += '<i style="background:#ffff00;"></i>More Females<br><br>';
+	div.innerHTML += '<i style="background:#0000ff;"></i>More Females<br><br>';
         }
         return div;
     };
