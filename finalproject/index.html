@@ -104,7 +104,7 @@ var markerWY = new L.marker([41.456454608267364, -104.72524021795344]).addTo(map
 let legend = L.control({position: 'bottomleft'});
 legend.onAdd = function (map) {
 	let div = L.DomUtil.create('div', 'legend');
-        div.innerHTML = '<b style="font-size:14px;">Sex Ratio</b><br>Avg. per state<br></b>';
+        div.innerHTML = '<b style="font-size:14px;">Sex Ratio</b><br>Avg. per state<br><br></b>';
 	//Makes color boxes for the legend
 	div.innerHTML += '<i style="background:#0000ff;"></i>More Males<br><br>';
 	div.innerHTML += '<i style="background:#ffff00;"></i>More Females<br><br>';
