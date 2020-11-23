@@ -58,11 +58,11 @@ var imagery = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}
 
 //sets the five state colors
 function getColor(stateIs) {
-    return stateIs === 'Nebraska' ? 'red':
-    stateIs === 'Montana'  ? 'blue':
-    stateIs === 'South Dakota'  ? 'red':
-    stateIs === 'North Dakota'  ? 'blue':
-    stateIs === 'Wyoming' ? 'blue' :
+    return stateIs === 'Nebraska' ? '#fff00':
+    stateIs === 'Montana'  ? '#0000ff':
+    stateIs === 'South Dakota'  ? '#ffff00':
+    stateIs === 'North Dakota'  ? '#0000ff':
+    stateIs === 'Wyoming' ? '#0000ff' :
     'rgba(0,0,0,0)'; //opacity 0 if not one of these five states
 }
 
