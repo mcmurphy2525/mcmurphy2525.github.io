@@ -1,1 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Lab 8</title>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" crossorigin=""/>
+        <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js" crossorigin=""></script>
+
+        <!--50 states geojson info-->
+        <script src="states.js"></script>
+       
+        <style type="text/css">
+            html, body { margin: 0; padding: 0; height: 100%; }
+            #map { min-height: 100%; }
+            /*popup wrapper styled to fit images*/
+            .leaflet-popup-content-wrapper {
+                width: 460px;
+                background: #000000;
+                color: #eeeeee;
+                box-sizing: border-box;
+          }
+        </style>
+    </head>
+    <body>
+        <div id="map"></div>
+      
+<script type="text/javascript">
+
+//set initial map position & zoom level
+var map = L.map('map', {
+    center: [43,-100],
+    zoom: 5
+});
+
+//add base map
+var imagery = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}', {
+    attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    subdomains: 'abcd',
+	minZoom: 0,
+	maxZoom: 18,
+	ext: 'png'
+}).addTo(map);
+
+//sets the five state colors
+function getColor(stateIs) {
+    return stateIs === 'Nebraska' ? '#aa0000':
+    stateIs === 'Montana'  ? '#ffaa00':
+    stateIs === 'South Dakota'  ? '#548ddd':
+    stateIs === 'North Dakota'  ? '#86b1ff':
+    stateIs === 'Wyoming' ? '#c5e0ff' :
+    'rgba(0,0,0,0)'; //opacity 0 if not one of these five states
+}
+
+//apply color to the five states
+function style(feature) {
+    return {
+        fillColor: getColor(feature.properties.NAME),
+        weight: 2, //outline weight of line
+        opacity: 0.7, //opacity of line
+        color: '#000000', //outline color
+        fillOpacity: 0.7 //opacity of filled color from getColor()
+    };
+}
+//add state data to map
+var states = new L.geoJson(stateInfo, {style:style}).addTo(map);
+
+//add markers and popups
+//Montana
+    var markerMT = new L.marker([46.10450531242844, -108.54301382493858]).addTo(map);
+    markerMT.bindPopup('<img src="TesseractDanceCollective.png" alt="Tesseract Dance Collective, Montana">');
+//Nebraska
+    var markerNE = new L.marker([40.86224172079705, -96.62844638000087]).addTo(map);
+    markerNE.bindPopup('<img src="TroupeSicorae.png" alt="Troupe Sicorae, Nebraska">');
+//North Dakota
+    var markerND = new L.marker([47.7253, -97.0329]).addTo(map);
+    markerND.bindPopup('<img src="TheLovelyDozen.png" alt="Troupe The Lovely Dozen, North Dakota">');
+//South Dakota
+    var markerSDa = new L.marker([43.449077489594266, -96.83354374061966]).addTo(map);
+    markerSDa.bindPopup('<img src="LiquidHipTherapy.png" alt="Troupe Liquid Hip Therapy, South Dakota">');
+    var markerSDb = new L.marker([44.17760927609738, -103.25901548406395]).addTo(map);
+    markerSDb.bindPopup('<img src="SultryShimmy.png" alt="Troupe Sultry Shimmy, South Dakota">');
+//Wyoming
+var markerWY = new L.marker([41.456454608267364, -104.72524021795344]).addTo(map);
+    markerWY.bindPopup('<img src="ChimeraBellydance.png" alt="Troupe Chimera Bellydance, Wyoming">');
+
+</script>
+
+</body>
+</html>
 
