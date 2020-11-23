@@ -1,29 +1,45 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Mohr Final Project Fall 2020</title>
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" crossorigin=""/>
-        <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js" crossorigin=""></script>
-
-        <!--50 states geojson info-->
-        <script src="states.js"></script>
-       
-        <style type="text/css">
-            html, body { margin: 0; padding: 0; height: 100%; }
-            #map { min-height: 100%; }
-            /*popup wrapper styled to fit images*/
-            .leaflet-popup-content-wrapper {
-                width: 460px;
+<head>
+<title>Mohr Final Project Fall 2020</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js" crossorigin=""></script>
+<!--50 states geojson info-->
+<script src="states.js"></script>
+<style type="text/css">
+	html, body { margin: 0; padding: 0; height: 100%; }
+	#map { min-height: 100%; }
+	/*popup wrapper styled to fit images -- found class to style by looking at source code rendered once map loads - F12 and arrow*/
+	.leaflet-popup-content-wrapper {
+		width: 460px;
                 background: #000000;
                 color: #eeeeee;
                 box-sizing: border-box;
+	}
+	.legend {
+              padding: 6px 8px;
+              line-height: 18px;
+              background: rgba(255,255,255,0.9);
+              box-shadow: 0 0 15px rgba(0,0,0,1);
+              border-radius: 5px;
           }
-        </style>
-    </head>
-    <body>
-        <div id="map"></div>
+ 	/* Optional: adjust the values below to change the appearance of the legend color boxes */
+	.legend i {
+		width: 18px;
+		height: 18px;
+		float: left;
+		margin-right: 8px;
+		opacity: 1;
+	}
+</style>
+</head>
+
+<body>
+<div id="map"></div>
       
 <script type="text/javascript">
+//wrapped script inside a function called when function loads to avoid "bare" variables
+const goMap = () => {
 
 //set initial map position & zoom level
 var map = L.map('map', {
@@ -31,7 +47,7 @@ var map = L.map('map', {
     zoom: 5
 });
 
-//add base map
+//add base map - used terrain layer version from lab 8
 var imagery = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}', {
     attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     subdomains: 'abcd',
@@ -42,25 +58,26 @@ var imagery = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}
 
 //sets the five state colors
 function getColor(stateIs) {
-    return stateIs === 'Nebraska' ? '#aa0000':
-    stateIs === 'Montana'  ? '#ffaa00':
-    stateIs === 'South Dakota'  ? '#548ddd':
-    stateIs === 'North Dakota'  ? '#86b1ff':
-    stateIs === 'Wyoming' ? '#c5e0ff' :
+    return stateIs === 'Nebraska' ? 'red':
+    stateIs === 'Montana'  ? 'blue':
+    stateIs === 'South Dakota'  ? 'red':
+    stateIs === 'North Dakota'  ? 'blue':
+    stateIs === 'Wyoming' ? 'blue' :
     'rgba(0,0,0,0)'; //opacity 0 if not one of these five states
 }
 
 //apply color to the five states
 function style(feature) {
     return {
-        fillColor: getColor(feature.properties.NAME),
+        fillColor: getColor(feature.properties.NAME), //uses the NAME property of the geojson data in the variable in the geojson.js file to
+//identify the five states you want. Calls the getColor function for all 50 states, but only the five you want will return color
         weight: 2, //outline weight of line
         opacity: 0.7, //opacity of line
         color: '#000000', //outline color
         fillOpacity: 0.7 //opacity of filled color from getColor()
     };
 }
-//add state data to map
+//add 50 states data to map - var stateInfo is inside geojson.js file
 var states = new L.geoJson(stateInfo, {style:style}).addTo(map);
 
 //add markers and popups
@@ -82,6 +99,23 @@ var states = new L.geoJson(stateInfo, {style:style}).addTo(map);
 var markerWY = new L.marker([41.456454608267364, -104.72524021795344]).addTo(map);
     markerWY.bindPopup('<img src="images/ChimeraBellydance.png" alt="Troupe Chimera Bellydance, Wyoming">');
 
+//MAKE THE LEGEND------------------------
+let legend = L.control({position: 'bottomleft'});
+legend.onAdd = function (map) {
+	let grades = ['Nebraska','South Dakota','Montana','Wyoming','North Dakota'];
+	var div = L.DomUtil.create('div', 'legend'),
+        div.innerHTML = '<b>Sex Ratio<br><br></b>';
+	// Loop to generate the color for the legend matching the map
+        for (var i = 0; i < 5; i++) {
+		div.innerHTML += '<i style="background:' + getColor(grades[i]) + '"></i>' + grades[i] + '<br><br>');
+        }
+        return div;
+    };
+    legend.addTo(map);	
+
+};
+
+goMap();
 </script>
 
 </body>
