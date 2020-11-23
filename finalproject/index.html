@@ -103,13 +103,12 @@ var markerWY = new L.marker([41.456454608267364, -104.72524021795344]).addTo(map
 //MAKE THE LEGEND------------------------
 let legend = L.control({position: 'bottomleft'});
 legend.onAdd = function (map) {
-	let grades = ['Nebraska','South Dakota','Montana','Wyoming','North Dakota'];
-	var div = L.DomUtil.create('div', 'legend');
-        div.innerHTML = '<b>Sex Ratio<br><br></b>';
-	// Loop to generate the color for the legend matching the map
-        div.innerHTML += '<i style="background:#ffff00;"></i>More Females<br><br>';
+	let div = L.DomUtil.create('div', 'legend');
+        div.innerHTML = '<b style="font-size:14px;">Sex Ratio</b><br>Avg. per state<br></b>';
+	//Makes color boxes for the legend
 	div.innerHTML += '<i style="background:#0000ff;"></i>More Males<br><br>';
-        return div;
+	div.innerHTML += '<i style="background:#ffff00;"></i>More Females<br><br>';
+        //return div;
     };
     legend.addTo(map);	
 
